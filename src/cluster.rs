@@ -98,9 +98,10 @@ pub fn levenshtein(a: &Vec<(usize, u64)>, b: &Vec<(usize, u64)>, r_c: usize) -> 
 }
 pub fn query(r_c: usize, sk: &Vec<(usize, u64)>, clusters: &DashMap<Vec<(usize, u64)>, Vec<Vec<(usize, u64)>>>) -> Vec<(Vec<(usize, u64)>, Vec<(usize, u64)>)> {
     let mut res = Vec::<(Vec<(usize, u64)>, Vec<(usize, u64)>)>::new();
-    if clusters.len() == 0 {return res;}
+    if clusters.len() == 0 || sk.len() == 0 {return res;}
     for e in clusters.iter() {
         let center = e.key(); let membs = e.value();
+        if membs.len() == 0 {continue;}
         if hamming(center, sk, r_c) < r_c {
             for mem in membs.iter() {
                 if hamming(mem, sk, r_c) == 0 {

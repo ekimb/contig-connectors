@@ -86,7 +86,7 @@ pub fn update_window(q: &mut VecDeque<u64>, q_pos: &mut VecDeque<usize>, q_min_v
 }
 
 pub fn extract_mers(seq: &[u8], params: &Params) -> Vec<Vec<u8>> {
-    let l = params.l;
+    let l = params.k;
     let hash_bound = ((params.density as f64) * 4_usize.pow(l as u32) as f64) as u64; 
     let lmask : u64 = ((1 as u64) << 2*l) - 1;
     let t = 3;
@@ -118,34 +118,8 @@ pub fn extract_mers(seq: &[u8], params: &Params) -> Vec<Vec<u8>> {
     }
     return seq_hashes
 } 
-
-pub fn seq_to_kmers(seq: &[u8], id: &str, params: &Params) -> Vec<Vec<u8>> {
-    let k = params.k;
-    let l = params.l;
-    let mut mers = Vec::<Vec<u8>>::new();
-    let lmask : u64 = ((1 as u64) << 2*l) - 1;
-    let q = 2_u64.pow(16) - 1;
-    let mut string_hashes = extract_mers(seq, params);
-    let num_hashes = string_hashes.len();
-    for i in 0..num_hashes {
-        let mut kmer_hash : u64 = 0;
-        let mut kmer_hash_rev : u64 = 0;
-        let mut kmer_start = 0;
-        let mut kmer_end = 0;
-        let mut reverse = false;
-        if i + k - 1 < num_hashes {
-            let mut kmer = Vec::<u8>::new();
-            for j in i..i+k {
-                kmer.extend(string_hashes[j].to_vec());
-            }
-            mers.push(kmer);
-        }
-    }
-    return mers;
-}
 pub fn seq_to_kmers_nthash(seq: &[u8], id: &str, params: &Params) -> Vec<(usize, u64)> {
-    let k = params.k;
-    let l = params.l;
+    let l = params.k;
     let density = params.density;
     let hash_bound = ((density as f64) * (u64::max_value() as f64)) as u64;    let pos_hashes : Vec<(usize, u64)> = NtHashIterator::new(seq, l).unwrap().enumerate().filter(|(i, x)| *x <= hash_bound).collect();
     return pos_hashes;

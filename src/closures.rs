@@ -32,7 +32,8 @@ where P: AsRef<Path>, {
 }
 
 pub fn index(filename: &PathBuf, params: &Params, threads: usize, queue_len: usize, fasta_reads: bool, index_path: &str, query_path: &str) {
-    let mut r_c = 1;
+    let mut resc : Arc<Mutex<Vec<(String, String)>>> = Arc::new(Mutex::new(Vec::new()));
+    let mut r_c = 4;
     let mut clusters : Arc<DashMap<Vec<(usize, u64)>, Vec<Vec<(usize, u64)>>>> = Arc::new(DashMap::new());
     let mut ids : Arc<DashMap<Vec<(usize, u64)>, String>> = Arc::new(DashMap::new());
     let seq_write = |file: &mut SeqFileType, s| {let _res = write!(file, "{}", s);};
@@ -58,7 +59,6 @@ pub fn index(filename: &PathBuf, params: &Params, threads: usize, queue_len: usi
         //seq_write(sequences_file, format!("{}\n", seq_line));
     };
     let index_read_aux_mer = |seq_str: &[u8], seq_id: &str| -> Option<usize> {
-        let k = params.k;
         let thread_id :usize =  thread_id::get();
         if sequences_files.get(&thread_id).is_none() {
             sequences_files.insert(thread_id, create_sequences_file(thread_id));
@@ -108,7 +108,11 @@ pub fn index(filename: &PathBuf, params: &Params, threads: usize, queue_len: usi
         let res = cluster::query(r_c, &sk, &clusters);
         if !res.is_empty() {
             for (big, small) in res.iter() {
-                println!("{}\n{:?}\nis contained in\n{}\n{:?}", ids.get(small).unwrap().value(), small, ids.get(big).unwrap().value(), big);
+                if big == small {continue;}
+                else {
+                    println!("{}\t{}", ids.get(small).unwrap().value().to_string(), ids.get(big).unwrap().value().to_string());
+                }
+                //println!("{}\n{:?}\nis contained in\n{}\n{:?}", i);
                 //println!("{}\tis contained in\t{}", ids.get(small).unwrap().value(), ids.get(big).unwrap().value());
             }
         }
@@ -157,6 +161,16 @@ pub fn index(filename: &PathBuf, params: &Params, threads: usize, queue_len: usi
             main_thread_mer(found)
         });
     } 
+    /*let res_path = format!("{}{}", index_path, ".cc");
+    let mut res_file =  match File::create(&res_path) {
+        Err(why) => panic!("Couldn't create {}: {}", res_path, why.description()),
+        Ok(res_file) => res_file,
+    };
+    let mut resc_view = resc.lock().unwrap();
+    resc_view.sort();
+    for (big, small) in resc_view.iter() {
+        write!(res_file, "{}\t{}", big, small);
+    }*/
 
 }
 /*pub fn query(filename: &PathBuf, params: &Params, threads: usize, queue_len: usize, fasta_reads: bool, index_path: &str, res_file: &mut File) {

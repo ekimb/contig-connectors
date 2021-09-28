@@ -6,3 +6,5 @@
 *.fa
 *.tab
 .DS_Store
+*.tar
+*.clust*
