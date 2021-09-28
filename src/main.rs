@@ -104,7 +104,7 @@ fn get_reader(path: &PathBuf) -> Box<dyn BufRead + Send> {
 }
 
 #[derive(StructOpt)]
-enum Msmash {
+enum cc {
     #[structopt(name = "index")]
     Index {
         #[structopt(parse(from_os_str), short, long)]
@@ -177,8 +177,8 @@ enum Msmash {
 fn main() {
     let start = Instant::now();
 
-    match Msmash::from_args() {
-        Msmash::Index { directory, k, l, density, threads, prefix } => {
+    match cc::from_args() {
+        cc::Index { directory, k, l, density, threads, prefix } => {
             let mut output_prefix;
             let mut kval : usize = 10;
             let mut lval : usize = 12;
@@ -190,7 +190,7 @@ fn main() {
             if l.is_some() {lval = l.unwrap()} else {println!("Warning: Using default l value ({}).", lval);}
             if density.is_some() {dval = density.unwrap()} else {println!("Warning: Using default density value ({}%).", dval * 100.0);} 
             if threads.is_some() {tval = threads.unwrap();} else {println!("Warning: Using default number of threads {}.", tval);}
-            output_prefix = PathBuf::from(format!("msmash-k{}-d{}-l{}", kval, dval, lval));
+            output_prefix = PathBuf::from(format!("cc-k{}-d{}-l{}", kval, dval, lval));
             if prefix.is_some() {output_prefix = prefix.unwrap();} else {println!("Warning: Using default output prefix ({}).", output_prefix.to_str().unwrap());}
             let params = Params { 
                 l: lval,
@@ -216,7 +216,7 @@ fn main() {
             closures::index(&index_dir, &params, tval, queue_len, fasta_reads, &index_path, &query_path);
         // idx \t mer \t origin         
         },
-        Msmash::Query { index, query, k, l, density, threads, prefix } => {
+        cc::Query { index, query, k, l, density, threads, prefix } => {
             let mut output_prefix;
             let mut kval : usize = 10;
             let mut lval : usize = 12;
@@ -230,7 +230,7 @@ fn main() {
             if l.is_some() {lval = l.unwrap()} else {println!("Warning: Using default l value ({}).", lval);}
             if density.is_some() {dval = density.unwrap()} else {println!("Warning: Using default density value ({}%).", dval * 100.0);} 
             if threads.is_some() {tval = threads.unwrap();} else {println!("Warning: Using default number of threads {}.", tval);}
-            output_prefix = PathBuf::from(format!("msmash-k{}-d{}-l{}", kval, dval, lval));
+            output_prefix = PathBuf::from(format!("cc-k{}-d{}-l{}", kval, dval, lval));
             if prefix.is_some() {output_prefix = prefix.unwrap();} else {println!("Warning: Using default output prefix ({}).", output_prefix.to_str().unwrap());}
             let params = Params { 
                 l: lval,
