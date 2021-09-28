@@ -1,0 +1,8 @@
+/target
+*.sequences
+*.ms
+*.acc
+*.msh
+*.fa
+*.tab
+.DS_Store
