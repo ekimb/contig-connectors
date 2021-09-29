@@ -1,0 +1,2 @@
+cargo:rustc-env=TYPENUM_BUILD_CONSTS=/Users/baris/contig-connectors/target/release/build/typenum-7f5ccde907da7aee/out/consts.rs
+cargo:rustc-env=TYPENUM_BUILD_OP=/Users/baris/contig-connectors/target/release/build/typenum-7f5ccde907da7aee/out/op.rs
