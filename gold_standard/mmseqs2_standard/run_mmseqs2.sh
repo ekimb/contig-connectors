@@ -51,3 +51,10 @@ samtools faidx reference/reference.ml500.fna
 # run mmseqs2
 mmseqs easy-search --threads 32 --search-type 3 query/query.ml500.fna reference/reference.ml500.fna mmseqs2_result.b6 tmp
 python filter_blast_6_to_containments.py -i mmseqs2_result.b6 -q query/query.ml500.fna.fai -r reference/reference.ml500.fna.fai -o mmseqs2_result_containments.b6
+gzip mmseqs2_result_containments.b6
+
+# run blast
+makeblastdb -in reference/reference.ml500.fna -input_type fasta -dbtype nucl -parse_seqids
+blastn -db reference/reference.ml500.fna -query query/query.ml500.fna -out blastn_result.b6 -outfmt 6 -num_threads 32
+python filter_blast_6_to_containments.py -i blastn_result.b6 -q query/query.ml500.fna.fai -r reference/reference.ml500.fna.fai -o blastn_result_containments.b6
+gzip blastn_result_containments.b6
