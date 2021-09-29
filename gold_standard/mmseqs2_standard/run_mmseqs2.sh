@@ -9,7 +9,7 @@ conda config --set always_yes yes
 conda config --add channels bioconda
 conda config --add channels conda-forge
 
-conda install wget pandas mmseqs2 bbmap
+conda install wget pandas mmseqs2 bbmap samtools blast
 
 # set up SSD
 sudo mkfs -t ext4 /dev/nvme1n1
@@ -28,6 +28,9 @@ wget https://raw.githubusercontent.com/NCBI-Codeathons/psss-datasets/master/data
 wget https://raw.githubusercontent.com/shafferm/psss-team2/main/gold_standard/mmseqs2_standard/filter_data_to_marine_contigs.py
 python filter_data_to_marine_contigs.py
 
+# get script for filtering blast 6 resuts to containments
+wget https://raw.githubusercontent.com/shafferm/psss-team2/main/gold_standard/filter_blast_6_to_containments.py
+
 # download all data
 mkdir query
 while read query_path; do
@@ -35,6 +38,7 @@ while read query_path; do
 done < query_paths.txt
 cat query/*.fna > query/query.fna
 reformat.sh in=query/query.fna out=query/query.ml500.fna ml=500
+samtools faidx query/query.ml500.fna
 
 mkdir reference
 while read reference_path; do
@@ -42,6 +46,8 @@ while read reference_path; do
 done < reference_paths.txt
 cat reference/*.fna > reference/reference.fna
 reformat.sh in=reference/reference.fna out=reference/reference.ml500.fna ml=500
+samtools faidx reference/reference.ml500.fna
 
 # run mmseqs2
-mmseqs easy-search --threads 32 --search-type 3 query/query.fna reference/reference.fna result.m8 tmp
+mmseqs easy-search --threads 32 --search-type 3 query/query.ml500.fna reference/reference.ml500.fna mmseqs2_result.b6 tmp
+python filter_blast_6_to_containments.py -i mmseqs2_result.b6 -q query/query.ml500.fna.fai -r reference/reference.ml500.fna.fai -o mmseqs2_result_containments.b6
