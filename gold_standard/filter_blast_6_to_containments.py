@@ -11,7 +11,7 @@ BOUTFMT6_COLUMNS = ['qId', 'tId', 'seqIdentity', 'alnLen', 'mismatchCnt', 'gapOp
 RESULTS_PATH = 'result.b6'
 
 
-PERCENT_IDENTITY = .95
+PERCENT_IDENTITY = 95
 COVERED_LENGTH = .95
 
 OUTPUT_PATH = 'results.containments.b6'
@@ -21,10 +21,10 @@ def check_containment(row, query_index, reference_index, percent_identity=PERCEN
     """Checks if a row from a blast out format 6 file is a containment
     Takes in a row from a blast out format 6 table, a DataFrame
     """
-    if row['seqIdentity'] > percent_identity:
-        query_covered = row['alnLen']/query_index.loc[row['qId'], 'LENGTH']
-        reference_covered = row['alnLen']/reference_index.loc[row['tId'], 'LENGTH']
-        if query_covered > covered_length or reference_covered > covered_length:
+    if (row['qId'] != row['tId']) and (row['seqIdentity'] >= percent_identity):
+        query_covered = row['alnLen']/float(query_index.loc[row['qId'], 'LENGTH'])
+        reference_covered = row['alnLen']/float(reference_index.loc[row['tId'], 'LENGTH'])
+        if query_covered >= covered_length or reference_covered >= covered_length:
             return True
         else:
             return False
@@ -44,7 +44,7 @@ def find_containments(results_path, query_index_path, reference_index_path, outp
 
     is_containment = search_results.apply(check_containment, axis=1,
                                           query_index=query_index, reference_index=reference_index,
-                                          percent_identity=percent_identity, covered_length=percent_identity)
+                                          percent_identity=percent_identity, covered_length=covered_length)
 
     search_results.loc[is_containment].to_csv(output_path, sep='\t', index=None)
 
