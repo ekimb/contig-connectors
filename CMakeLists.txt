@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.10)
+project(contig-connectors VERSION 1.0)
+set(CMAKE_CXX_STANDARD 14)
+find_package(OpenMP)
+add_executable(contig-connectors src/main.cpp src/sketch.cpp src/sketch.hpp src/query.cpp src/query.hpp)
+if(OpenMP_CXX_FOUND)
+    target_link_libraries(contig-connectors PUBLIC OpenMP::OpenMP_CXX)
+endif()
