@@ -138,9 +138,9 @@ int main (int argc, char **argv) {
     std::cout << "Built bins in " << elapsed_b.count() << " s." << std::endl; 
     auto start_q = std::chrono::high_resolution_clock::now(); 
     std::vector<std::string> output_streams(threads);
-    int chunk_size = 5000;
+    int chunk_size = 10000;
     for (int i = 0; i < threads; ++i){
-        output_streams[i].reserve((chunk_size / threads + 1) * 450); //approx
+        output_streams[i].reserve((chunk_size / threads + 1) * 10); //approx
     }
     gzFile fp = gzopen(query_file, "r");
     auto ks = klibpp::make_ikstream(fp, gzread);

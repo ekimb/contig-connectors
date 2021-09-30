@@ -6,10 +6,15 @@ int32_t hamming(std::vector<Minimizer>::iterator v1_start,
 				std::vector<Minimizer>::iterator v2_start, 
 				std::vector<Minimizer>::iterator v2_end){
 	//Function to compute the hamming distance between two hash vectors of equal size;
-	int32_t dist = 0;
-    for (auto  it = v1_start, it2 = v2_start; it != v1_end && it2 != v2_end; it++, it2++){
+	int32_t dist = -1;
+    for (auto it = v1_start, it2 = v2_start; it != v1_end && it2 != v2_end; it++, it2++){
     	if ((*it).hash != (*it2).hash)
-    		dist += 1;
+    		if (dist == -1) {
+                dist += 2;
+            } 
+            else {
+                dist++;
+            }
     }
     return dist;
 }
@@ -21,7 +26,7 @@ int32_t rolling_hamming_dist(std::vector<Minimizer> hashes_query, std::vector<Mi
 	for(int i = 0; i < hashes_subject.size()-hashes_query.size(); i++){
 		int32_t temp_dist = hamming(hashes_subject.begin()+i, hashes_subject.begin()+hashes_query.size(), 
 							hashes_query.begin(), hashes_query.end());
-		if (temp_dist < dist)
+		if (temp_dist < dist && temp_dist != -1)
 			dist = temp_dist; 
 	}
 	return dist;
