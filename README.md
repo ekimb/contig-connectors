@@ -8,5 +8,15 @@ This project is part of the Petabyte-Scale Sequence Search: Metagenomics Benchma
 
 Detailed codeathon project organization is found in the [wiki](https://github.com/NCBI-Codeathons/psss-team2/wiki).
 
+## Problem Statement
 
+## Team
 
+Mihai Pop, PhD 
+University of Maryland, College Park
+
+Rob Patro, PhD
+University of Maryland, College Park
+
+Jackie Michaelis, PhD 
+University of Maryland, College Park
