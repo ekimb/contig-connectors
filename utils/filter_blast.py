@@ -1,4 +1,10 @@
-from pafpy import PafFile
+#!/usr/bin/env python3
+
+"""
+filter a BLAST6 output file to contain only hits
+that meet our definition for containment.
+"""
+
 import argparse
 import sys
 

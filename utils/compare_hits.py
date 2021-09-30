@@ -1,6 +1,15 @@
-from pafpy import PafFile
+#!/usr/bin/env python3
+
 import argparse
 import sys
+
+"""
+Parse two BLAST6 format files and compute the precision 
+and recall of a predicted set of containments against 
+the truth.
+"""
+
+#FAI_HEADER = ['NAME', 'LENGTH', 'OFFSET', 'LINEBASES', 'LINEWIDTH', 'QUALOFFSET']
 
 def parse_tab6(tf):
 	res = []
@@ -21,36 +30,17 @@ def main(args):
 	truth = set(parse_tab6(tf))
 	pred = set(parse_tab6(pf))
 
-	missed = len(truth - pred)
+	fn = len(truth - pred)
 	fp = len(pred - truth)
 	tp = len(truth & pred)
-	print(f"tp: {tp}, fn: {missed}, fp: {fp}")
+	print(f"tp: {tp}, fn: {fn}, fp: {fp}")
 	print("precision : {}".format(tp / (tp+fp)))
-	print("recall : {}".format(tp / (tp+missed)))
-
-    """
-	d = {}
-	with open(args.lens) as ifile:
-		for l in ifile:
-			toks = l.rstrip().split()
-			d[toks[0]] = int(toks[1])
-
-	fn =  list(truth - pred)
-	num = 0
-	for f in fp:
-		if num > 10:
-			break
-		l1 = d[f[0]]
-		l2 = d[f[1]]
-		if l1 >= 500 and l2 >= 500:
-			print(f"{f[0]} : {l1} <=> {f[1]} {l2}")	
-			num += 1
-	"""
+	print("recall : {}".format(tp / (tp+fn)))
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description='compare to ground truth containments.')
 	parser.add_argument('--truth', help='truth TAB6 BLAST file')
 	parser.add_argument('--pred', help='predicted TAB6 BLAST file')
-	parser.add_argument('--lens', help='lengths file')
+	#parser.add_argument('--fai', help='faidx file (to get lengths)')
 	args = parser.parse_args()
 	main(args)

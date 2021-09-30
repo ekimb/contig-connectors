@@ -1,27 +1,37 @@
 from pafpy import PafFile
 import argparse
+#import pandas as pd
 import sys
 
+"""
+Filters a PAF file for containment according to our
+criteria.
 
-def main(argsj):
-    pi = args.paf
-    of = args.tblast
+NOTE: this should ideally be merged with the script to 
+filter a BLAST6 file for containment.
+"""
 
+
+#FAI_HEADER = ['NAME', 'LENGTH', 'OFFSET', 'LINEBASES', 'LINEWIDTH', 'QUALOFFSET']
+
+def write_filtered_paf(pi, ofile):
     def frac_covered(r):
         return max(r.query_coverage, r.target_coverage)
 
-    ofile = open(of, 'w')
-    ofile.write('qseqid\tsseqid\tpident\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore\n')
     with PafFile(pi) as paf:
         for record in paf:
             if record.qname != record.tname:
                 if record.qlen >= args.minlen:
                     if (frac_covered(record) >= args.fract) and (record.blast_identity() >= args.ident):
-                        print(record)
                         ofile.write(f"{record.qname}\t{record.tname}\t{record.blast_identity()}\t*\t*\t*\t*\t*\t*\t*\t*\t*\n")
-                    else:
-                        print(record.qname, record.tname, frac_covered(record), record.blast_identity())
 
+def main(argsj):
+    pi = args.paf
+    of = args.tblast
+
+    ofile = open(of, 'w')
+    ofile.write('qseqid\tsseqid\tpident\tlength\tmismatch\tgapopen\tqstart\tqend\tsstart\tsend\tevalue\tbitscore\n')
+    write_filtered_paf(pi, ofile)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Filter minimap2 output to find high-quality containment.')
