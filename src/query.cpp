@@ -16,6 +16,7 @@ int32_t hamming(std::vector<Minimizer>::iterator v1_start,
                 dist++;
             }
     }
+    if (dist == -1) {dist = 0;}
     return dist;
 }
 
@@ -55,11 +56,11 @@ std::vector<unsigned int> query_containments(Sketch &query, Bin &b, std::vector<
 							containments.push_back(ref_id);
 							//std::cout<<"Query Contained in "<<ref_id<<". Hamming distance is "<<dist<<std::endl;
 						}
-                        int32_t dist_rev = rolling_hamming_dist(query_minimizers_rev, subject_minimizers);
+                        /*int32_t dist_rev = rolling_hamming_dist(query_minimizers_rev, subject_minimizers);
 						if (dist_rev == 0){
 							containments.push_back(ref_id);
 							//std::cout<<"Query contained in "<<ref_id<<" in reverse. Hamming distance is "<<dist_rev<<std::endl;
-						}	
+						}	*/
 
 					}
 					else {
@@ -68,11 +69,11 @@ std::vector<unsigned int> query_containments(Sketch &query, Bin &b, std::vector<
 							containments.push_back(ref_id);
 							//std::cout<<ref_id<<" Contained in query. Hamming distance is "<<dist<<std::endl;
 						}
-                        int32_t dist_rev = rolling_hamming_dist(subject_minimizers, query_minimizers_rev);
+                        /*int32_t dist_rev = rolling_hamming_dist(subject_minimizers, query_minimizers_rev);
 						if (dist_rev == 0) {//dist_thresh - parameterize
 							containments.push_back(ref_id);
 							//std::cout<<ref_id<<" Contained in query in reverse. Hamming distance is "<<dist_rev<<std::endl;
-						}
+						}*/
 					}
 
 				}

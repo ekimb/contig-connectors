@@ -140,7 +140,7 @@ int main (int argc, char **argv) {
     std::vector<std::string> output_streams(threads);
     int chunk_size = 10000;
     for (int i = 0; i < threads; ++i){
-        output_streams[i].reserve((chunk_size / threads + 1) * 10); //approx
+        output_streams[i].reserve((chunk_size / threads + 1)); //approx
     }
     gzFile fp = gzopen(query_file, "r");
     auto ks = klibpp::make_ikstream(fp, gzread);
@@ -177,6 +177,8 @@ int main (int argc, char **argv) {
             output_streams[i].clear();
         }
     }
+    output_file.close();
+    gzclose(fp);
     auto finish_q = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_q = finish_q - start_q;
     std::cout << "Finished queries in " << elapsed_q.count() << " s." << std::endl; 
