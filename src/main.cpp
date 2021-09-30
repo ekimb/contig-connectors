@@ -117,7 +117,7 @@ int main (int argc, char **argv) {
     for (size_t i = 0; i < ref_seqs.size(); ++i) {
         auto ref_seq = ref_seqs[i];
         sketch sk;
-        sk = get_sketch(k, ref_seq, d, i);
+        sk = get_sketch(k, ref_seq, d, i, false);
         ref_sk.push_back(sk);
     }    
     auto finish_sk = std::chrono::high_resolution_clock::now();

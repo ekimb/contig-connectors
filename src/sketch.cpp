@@ -58,7 +58,7 @@ static inline void minimizers(int k, std::string &seq, float density, std::vecto
 	}
 }
 
-sketch get_sketch(int k, std::string &seq, float density, unsigned int ref_idx) {
+sketch get_sketch(int k, std::string &seq, float density, unsigned int ref_idx, bool is_query) {
     std::vector<minimizer> v;
     sketch e (v, ref_idx);
     if (seq.length() < k) {return e;}
@@ -68,8 +68,17 @@ sketch get_sketch(int k, std::string &seq, float density, unsigned int ref_idx) 
     minimizers(k, seq, density, hashes, coords);
     unsigned int sk_len = hashes.size();
     for (int i = 0; i < sk_len; i++) {
-        minimizer m (hashes[i], coords[i]);
+        minimizer m (hashes[i], coords[i], false);
         v.push_back(m);
+    }
+    if (is_query) {
+        std::vector<uint64_t> hashes_rev (hashes.rbegin(), hashes.rend());
+        std::vector<unsigned int> coords_rev (coords.rbegin(), coords.rend());
+        for (int i = 0; i < sk_len; i++) {
+            coords_rev[i] = seq.length() - coords_rev[i] + k;
+            minimizer m_rev (hashes_rev[i], coords_rev[i], true);
+            v.push_back(m_rev); 
+        }
     }
     sketch sk (v, ref_idx);
     return sk;
