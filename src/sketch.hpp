@@ -15,6 +15,7 @@ struct Sketch {
     std::vector<Minimizer> mins;
     std::vector<Minimizer> mins_rev;
     unsigned int ref_id;
+    std::vector<unsigned int> cont_ids;
 };
 
 typedef std::unordered_map< unsigned int, std::string > idx_to_id;

@@ -34,7 +34,6 @@ int32_t rolling_hamming_dist(std::vector<Minimizer> hashes_query, std::vector<Mi
 }
 
 std::vector<unsigned int> query_containments(Sketch &query, Bin &b, std::vector<Sketch> &ref_sk){
-	std::set<unsigned int> checked;
 	std::vector<Minimizer> query_minimizers = query.mins;
    	std::vector<Minimizer> query_minimizers_rev = query.mins_rev; 
 	unsigned int query_id = query.ref_id;
@@ -46,10 +45,10 @@ std::vector<unsigned int> query_containments(Sketch &query, Bin &b, std::vector<
 			std::vector<std::tuple<Minimizer, unsigned int>> seqs_in_bin = b[min_value]; 
 			for (auto s = seqs_in_bin.begin(); s != seqs_in_bin.end(); s++) {
                 unsigned int ref_id = std::get<1>(*s);
-				//Checks if the subject is already checked for containments.
-				if (checked.find(ref_id) == checked.end()){
-					std::vector<Minimizer> subject_minimizers = (ref_sk[ref_id].mins);
-					checked.insert(ref_id);
+				std::vector<unsigned int>::iterator it;
+				std::vector<Minimizer> subject_minimizers = (ref_sk[ref_id].mins);
+				it = std::find(query.cont_ids.begin(), query.cont_ids.end(), ref_id);
+				if (it == query.cont_ids.end()){
 					if (query_minimizers.size() < subject_minimizers.size()) {
 						int32_t dist = rolling_hamming_dist(query_minimizers, subject_minimizers);
 						if (dist == 0){
@@ -61,7 +60,6 @@ std::vector<unsigned int> query_containments(Sketch &query, Bin &b, std::vector<
 							containments.push_back(ref_id);
 							//std::cout<<"Query contained in "<<ref_id<<" in reverse. Hamming distance is "<<dist_rev<<std::endl;
 						}	*/
-
 					}
 					else {
 						int32_t dist = rolling_hamming_dist(subject_minimizers, query_minimizers);
@@ -75,7 +73,7 @@ std::vector<unsigned int> query_containments(Sketch &query, Bin &b, std::vector<
 							//std::cout<<ref_id<<" Contained in query in reverse. Hamming distance is "<<dist_rev<<std::endl;
 						}*/
 					}
-
+					query.cont_ids.push_back(ref_id);
 				}
 			}
 		}

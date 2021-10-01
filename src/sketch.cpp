@@ -61,6 +61,7 @@ static inline void minimizers(int k, std::string &seq, float density, std::vecto
 Sketch get_sketch(int k, std::string &seq, float density, unsigned int ref_id, bool is_query) {
     std::vector<Minimizer> v;
     std::vector<Minimizer> v_rev;
+    std::vector<unsigned int> cont_ids = std::vector<unsigned int>();
     Sketch sk;
     if (seq.length() < k) {return sk;}
     std::transform(seq.begin(), seq.end(), seq.begin(), ::toupper);
@@ -78,7 +79,7 @@ Sketch get_sketch(int k, std::string &seq, float density, unsigned int ref_id, b
             v_rev.push_back(m_rev);
         }
     }
-    Sketch skf = {v, v_rev, ref_id};
+    Sketch skf = {v, v_rev, ref_id, cont_ids};
     return skf;
 }
 

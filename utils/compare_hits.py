@@ -29,11 +29,10 @@ def main(args):
 	pf = args.pred
 	truth = set(parse_tab6(tf))
 	pred = set(parse_tab6(pf))
-
 	fn = len(truth - pred)
 	fp = len(pred - truth)
 	tp = len(truth & pred)
-	print(f"tp: {tp}, fn: {fn}, fp: {fp}")
+	print(f"# containments: {len(pred)}, tp: {tp}, fn: {fn}, fp: {fp}")
 	print("precision : {}".format(tp / (tp+fp)))
 	print("recall : {}".format(tp / (tp+fn)))
 

@@ -27,7 +27,9 @@ static uint64_t parse(std::vector<std::string> &seqs, std::vector<unsigned int> 
                 lengths.push_back(seq.length());
                 ref_size += seq.length();
             }
-            ids[ref_idx] = line.substr(1, line.length() -1);
+            std::string delimiter = " ";
+            std::string token = line.substr(1, line.find(delimiter)-1);
+            ids[ref_idx] = token;
             ref_idx++;
             seq = "";
         }
@@ -132,7 +134,7 @@ int main (int argc, char **argv) {
     auto start_b = std::chrono::high_resolution_clock::now();
     Bin b;
     create_bins(ref_sk, b);
-    print(b);
+    //print(b);
     auto finish_b = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_b = finish_b - start_b;
     std::cout << "Built bins in " << elapsed_b.count() << " s." << std::endl; 
@@ -140,7 +142,7 @@ int main (int argc, char **argv) {
     std::vector<std::string> output_streams(threads);
     int chunk_size = 10000;
     for (int i = 0; i < threads; ++i){
-        output_streams[i].reserve((chunk_size / threads + 1)); //approx
+        output_streams[i].reserve((chunk_size / threads + 1));  //approx
     }
     gzFile fp = gzopen(query_file, "r");
     auto ks = klibpp::make_ikstream(fp, gzread);
@@ -164,7 +166,7 @@ int main (int argc, char **argv) {
                 output_streams[omp_get_thread_num()].append(record.name);
                 output_streams[omp_get_thread_num()].append("\t");
                 output_streams[omp_get_thread_num()].append(ids[containments[i]]);
-                output_streams[omp_get_thread_num()].append("\n");
+                output_streams[omp_get_thread_num()].append("\t*\t*\t*\t*\t*\t*\t*\t*\t*\t*\n");
 
             }
             
@@ -173,6 +175,7 @@ int main (int argc, char **argv) {
         std::cout << "Done!" << std::endl;
         // Output results
         for (int i = 0; i < threads; ++i) {
+            output_file << "qId\ttId\tseqIdentity\talnLen\tmismatchCnt\tgapOpenCnt\tqStart\tqEnd\ttStart\ttEnd\teVal\tbitScore\n";
             output_file << output_streams[i];
             output_streams[i].clear();
         }
