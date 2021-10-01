@@ -23,3 +23,25 @@ University of Maryland, College Park
 
 Jackie Michaelis, PhD 
 University of Maryland, College Park
+
+Nicholas Cooley
+University of Pittsburgh
+
+Barış Ekim
+Massachusetts Institute of Technology (MIT)
+
+Priyanka Ghosh
+National Institutes of Health
+
+Harihara Subrahmaniam Muralidharan
+University of Maryland, College Park
+
+Amatur Rahman
+Pennsylvania State University
+
+Vinicius Salazar
+
+Michael Shaffer
+
+Andrew Tritt
+Lawrence Berkeley National Laboratory
