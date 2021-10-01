@@ -25,9 +25,8 @@ by our definition (at least 95% of the query is covered by an alignment of at le
 `filter_blast.py` : This should be merged with the above for functionality, but this currently filters results in BLAST6 format to retain just hits that
 match the adopted definition of containment.
 
-`compare_hits.py` : From a ground truth and predicted set of hits in BLAST6 format (with at least the first 3 columns populated), this script computes precision and 
-and recall of the predicted containments compared to the truth.  This comparison ignores order (i.e. p contained in q is treated identically to q contained in p) and 
-explicitly filters out any reported self containments.
+`compare_hits.py` : From a ground truth and predicted set of hits in BLAST6 format (with at least the first 3 columns populated), this script computes precision and recall of the predicted containments compared to the truth.  This comparison ignores order (i.e. p contained in q is treated identically to q contained in p) and explicitly filters out any reported self containments.
+
 =======
 
 # Benchmarking Metagenomic Contig Matches
