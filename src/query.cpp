@@ -121,8 +121,7 @@ std::pair<int32_t, unsigned int> rolling_hamming_dist(std::vector<Minimizer> has
 
 std::vector<unsigned int> query_containments(std::string &seq, Sketch &query, Bin &b, std::vector<Sketch> &ref_sk, std::vector<std::string> &seqs, unsigned int k){
 	std::vector<Minimizer> query_minimizers = query.mins;
-   	std::vector<Minimizer> query_minimizers_rev = query.mins;
-	std::reverse(query_minimizers_rev.begin(), query_minimizers_rev.end()); 
+   	std::vector<Minimizer> query_minimizers_rev = query.mins_rev;
 	unsigned int query_id = query.ref_id;
 	std::vector<unsigned int> containments;
 	for (auto min = query_minimizers.begin(); min != query_minimizers.end(); min++){
@@ -144,13 +143,15 @@ std::vector<unsigned int> query_containments(std::string &seq, Sketch &query, Bi
 								containments.push_back(ref_id);
 							//std::cout<<"Query Contained in "<<ref_id<<". Hamming distance is "<<dist<<std::endl;
 						}
-						/*std::pair<int32_t, unsigned int> p_rev = rolling_hamming_dist(query_minimizers_rev, subject_minimizers);
-						if (std::get<0>(p_rev) == 0){
-							float ani_rev = get_ani(std::get<1>(p_rev), seq, query.mins_rev, subject_minimizers, ref_id, seqs, k);
-							if (ani_rev >= 0.95)
-								containments.push_back(ref_id);
-							//std::cout<<"Query Contained in "<<ref_id<<". Hamming distance is "<<dist<<std::endl;
-						}*/
+						else {
+							std::pair<int32_t, unsigned int> p_rev = rolling_hamming_dist(query_minimizers_rev, subject_minimizers);
+							if (std::get<0>(p_rev) == 0){
+								float ani_rev = get_ani(std::get<1>(p_rev), seq, query.mins_rev, subject_minimizers, ref_id, seqs, k);
+								if (ani_rev >= 0.95)
+									containments.push_back(ref_id);
+								//std::cout<<"Query Contained in "<<ref_id<<". Hamming distance is "<<dist<<std::endl;
+							}
+						}
 					}
 					else {
 						std::pair<int32_t, unsigned int> p = rolling_hamming_dist(subject_minimizers, query_minimizers);
@@ -158,6 +159,15 @@ std::vector<unsigned int> query_containments(std::string &seq, Sketch &query, Bi
 							float ani = get_ani(std::get<1>(p), seq, query_minimizers, subject_minimizers, ref_id, seqs, k);
 							if (ani >= 0.95)
 								containments.push_back(ref_id);
+						}
+						else {
+							std::pair<int32_t, unsigned int> p_rev = rolling_hamming_dist(subject_minimizers,query_minimizers_rev);
+							if (std::get<0>(p_rev) == 0){
+								float ani_rev = get_ani(std::get<1>(p_rev), seq, query_minimizers_rev, subject_minimizers, ref_id, seqs, k);
+								if (ani_rev >= 0.95)
+									containments.push_back(ref_id);
+								//std::cout<<"Query Contained in "<<ref_id<<". Hamming distance is "<<dist<<std::endl;
+							}
 						}
 					}
 					query.cont_ids.push_back(ref_id);

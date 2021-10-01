@@ -75,7 +75,7 @@ Sketch get_sketch(int k, std::string &seq, float density, unsigned int ref_id, b
         v.push_back(m);
         if (is_query) {
             Minimizer m_rev;
-            m_rev.hash = hashes[sk_len - i - 1]; m_rev.pos = seq.length() - coords[sk_len - i - 1] + k;
+            m_rev.hash = hashes[sk_len - i - 1]; m_rev.pos = seq.length() - coords[sk_len - i - 1] - k;
             v_rev.push_back(m_rev);
         }
     }
