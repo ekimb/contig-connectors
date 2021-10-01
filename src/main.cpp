@@ -161,7 +161,7 @@ int main (int argc, char **argv) {
             auto record = records[i];
             query_mers = get_sketch(k, record.seq, d, q_id, true);
             std::vector<unsigned int> containments;
-            containments = query_containments(query_mers, b, ref_sk);
+            containments = query_containments(record.seq, query_mers, b, ref_sk, ref_seqs, k);
             for (int i = 0; i < containments.size(); i++) {
                 output_streams[omp_get_thread_num()].append(record.name);
                 output_streams[omp_get_thread_num()].append("\t");
