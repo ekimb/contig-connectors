@@ -16,13 +16,13 @@ Within the codeathon, we identified a way to benchmark contig containments (ie. 
 ## Team
 
 Mihai Pop, PhD- 
-University of Maryland, College Park
+University of Maryland
 
 Rob Patro, PhD- 
-University of Maryland, College Park
+University of Maryland
 
 Jackie Michaelis, PhD- 
-University of Maryland, College Park
+University of Maryland
 
 Nicholas Cooley- 
 University of Pittsburgh
@@ -31,17 +31,19 @@ Barış Ekim-
 Massachusetts Institute of Technology (MIT)
 
 Priyanka Ghosh- 
-National Institutes of Health
+National Institutes of Health (NIH)
 
 Harihara Subrahmaniam Muralidharan- 
-University of Maryland, College Park
+University of Maryland
 
 Amatur Rahman- 
 Pennsylvania State University
 
-Vinicius Salazar
+Vinicius Salazar-
+University of Melbourne, Australia
 
-Michael Shaffer
+Michael Shaffer- 
+Colorado State University
 
 Andrew Tritt- 
 Lawrence Berkeley National Laboratory
