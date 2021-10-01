@@ -32,7 +32,7 @@ def main(args):
 	fn = len(truth - pred)
 	fp = len(pred - truth)
 	tp = len(truth & pred)
-	print(f"# containments: {len(pred)}, tp: {tp}, fn: {fn}, fp: {fp}")
+	print(f"# truth: {len(truth)}, # pred: {len(pred)}, tp: {tp}, fn: {fn}, fp: {fp}")
 	print("precision : {}".format(tp / (tp+fp)))
 	print("recall : {}".format(tp / (tp+fn)))
 
