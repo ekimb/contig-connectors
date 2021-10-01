@@ -9,9 +9,9 @@ The sketches are serialized to file.  This indexer code is written in Rust and e
 subdirectory.  To build this code, change into the `rust-cc` directory and run `cargo build --release`.
 
 `query` : The query code reads the indexed sketches and bins sketches by the hashes they contain.  The query is sketched and checked against 
-the bins that may have a hit for the query.  Within the bin, the min Hamming distance is computed against the bin elements (brute force for now but this can easily be improved). 
-Queries are finially filtered by (gappless) ANI and output.  The query code is written in c++ and lives in the `src` subdirectory.  To build this code create a `build` directory,
-change into it, and execute `cmake .. && make`.
+the bins that may have a hit for the query.  Within the bin, the minimum Hamming distance is computed against the bin elements (brute force for now but this can easily be improved). 
+Queries are finially filtered by (gapless) ANI and output.  The query code is written in C++ and lives in the `src` subdirectory.  To build this code create a `build` directory,
+change into it, and execute `cmake .. && cmake --build . --config release`.
 
 ### Utilities 
 
